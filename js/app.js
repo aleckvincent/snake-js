@@ -6,7 +6,7 @@ window.onload = function () {
     let apple = new Apple();
 
     control.getKeyDown(snake);
-    snake.draw();
-    apple.draw();
+    snake.drawApple();
+   
 
 }

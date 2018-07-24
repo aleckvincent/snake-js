@@ -1,3 +1,11 @@
-body{
-    background-color: beige; 
+#myCanvas{
+    background: rgb(190, 241, 190); 
+}
+
+html,
+body {
+    background: rgb(190, 241, 190);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }

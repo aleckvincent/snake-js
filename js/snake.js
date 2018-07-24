@@ -3,10 +3,20 @@ class Snake {
     constructor() {
         this.length = 0;
         this.speed = 0;
-        this.positionX = 0;
-        this.positionY = 100;
+
         this.score = 0;
         this.canvas = document.getElementById('myCanvas');
+        this.square = new Square();
+        this.coord = [
+            { x: 0, y: 0 },
+            { x: 25, y: 0 },
+            { x: 50, y: 0 }
+        ];
+
+        this.appleCoord = [
+            { x: 75, y: 75 }
+        ];
+
         if (!this.canvas) {
             alert("Impossible de récupérer le canvas");
             return;
@@ -21,23 +31,88 @@ class Snake {
 
     draw() {
         this.context.beginPath();
-        this.context.fillRect(this.positionX, this.positionY, 20, 20);
-        this.context.fillRect(this.positionX+25, this.positionY, 20, 20);
-        this.context.fillRect(this.positionX+50, this.positionY, 20, 20);
+        for (const c of this.coord) {
+            this.square.draw(this.context, c);
+        }
         this.context.closePath();
     }
 
-    moveX() {        
-        this.positionX = this.positionX + 15;
-        console.log(this.positionX);
+    moveRight() {
+
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.draw(this.positionX);
+        this.coord.shift();
+        this.coord.push({
+            x: this.coord[1].x + 25,
+            y: this.coord[1].y
+        });
+
+        for (const c of this.coord) {
+            this.square.draw(this.context, c);
+        }
     }
 
-    moveY() {       
-        this.positionY = this.positionY + 75;
-        console.log(this.positionY);
+
+    moveDown() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.draw(this.positionX);
+        this.coord.shift();
+        this.coord.push({
+            x: this.coord[1].x,
+            y: this.coord[1].y + 25
+        });
+
+        for (const c of this.coord) {
+            this.square.draw(this.context, c);
+        }
     }
+
+
+    moveLeft() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.coord.shift();
+        this.coord.push({
+            x: this.coord[1].x - 25,
+            y: this.coord[1].y
+        });
+
+        for (const c of this.coord) {
+            this.square.draw(this.context, c);
+        }
+    }
+
+    moveUp() {        
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.coord.shift();
+        this.coord.push({
+            x: this.coord[1].x,
+            y: this.coord[1].y - 25
+        });
+
+        for (const c of this.coord) {
+            this.square.draw(this.context, c);
+        }
+    }
+
+
+
+    drawApple() {
+        this.context.beginPath();
+        this.context.arc(this.appleCoord[0].x, this.appleCoord[0].y, 10, 0, 2 * Math.PI);
+        this.context.stroke();
+        this.context.closePath();
+    }
+
+
+
+    checkIfEat() {
+
+        if(this.coord[2].x === this.appleCoord[0].x) {
+            if(this.coord[2].y === this.appleCoord[0].y) {
+                this.score = this.score + 1;
+                console.log('Score: '+ this.score)
+            }
+            
+        }
+      
+    }
+
 }
