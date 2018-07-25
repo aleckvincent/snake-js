@@ -1,36 +1,73 @@
 class Control {
 
-    
-    constructor(){
-        this.current = "a";
+
+    constructor() {
+        this.snake = new Snake();
+        this.current = 'right';
     }
-    
 
-    getKeyDown(snake) {
-        document.addEventListener("keydown", function (event) {
 
-            let value = event.keyCode;
-            if (value === 39) {
-                snake.moveRight();
-            }
+    getKeyDown() {
+        document.addEventListener('keydown', this.handleKey.bind(this));
+    }
 
-            if(value === 40) {
-              
-                snake.moveDown();
-            }
+    animate() {
+        this.snake.move(this.current);
+        this.snake.checkIfEat();
+        this.snake.checkIfOut();
+    }
 
-            if(value === 37) {
-                snake.moveLeft();
-            }
 
-            if(value === 38) {
-                snake.moveUp();
-            }
-
-            snake.drawApple();
-            snake.checkIfEat();
-        });
-
+    handleKey(event) {
+        let value = event.keyCode;
         
+        let choice = 'right';
+        if (value === 39) {
+            if(this.current === 'left') {
+                return;
+            }
+            if (choice !== this.current) {
+                choice = 'right';
+                this.current = 'right';
+                this.snake.move(this.current);
+            }
+
+        }
+
+        if (value === 40) {
+            if(this.current === 'up') {
+                return;
+            }
+            choice = 'down';
+            if (choice !== this.current) {
+                this.current = 'down';
+                this.snake.move(this.current);
+            }
+        }
+
+        if (value === 37) {
+            if(this.current === 'right') {
+                return;
+            }
+            choice = 'left';
+            if (choice !== this.current) {
+                this.current = 'left';
+                this.snake.move(this.current);
+            }
+        }
+
+        if (value === 38) {
+            if(this.current === 'down') {
+                return;
+            }
+            choice = 'up';
+            if (choice !== this.current) {
+                this.current = 'up';
+                this.snake.move(this.current);
+            }
+        }
+        // this.snake.drawApple();
+        // this.snake.checkIfEat();
+        // this.snake.checkIfOut();
     }
 }
