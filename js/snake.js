@@ -4,13 +4,14 @@ class Snake {
 
     constructor() {
         this.length = 0;
-        this.speed = 0;
         this.score = 0;
+        this.speed = 600;
         this.squares = [
             new Square(0, 20),
             new Square(20, 20),
             new Square(40, 20)
         ];
+        
     }
 
     /**
@@ -74,6 +75,12 @@ class Snake {
         let lastIndex = this.squares.length - 1;
         if (this.squares[lastIndex].x === apple.appleX && this.squares[lastIndex].y === apple.appleY) {
             this.score = this.score + 30;
+            let eatAudio = new Audio("coin.wav");
+            eatAudio.play();
+            if(this.score != 0) {
+                this.speed = (this.score / 30) * 100;
+                console.log(this.speed);
+            }
             apple.appleX = (Math.floor(Math.random() * (window.innerWidth / 20))) * 20;
             apple.appleY = (Math.floor(Math.random() * (window.innerHeight / 20))) * 20;
             this.squares.unshift(new Square(this.squares[0].x, this.squares[0].y));
@@ -83,13 +90,11 @@ class Snake {
 
     gameOver() {
         let lastIndex = this.squares.length - 1;
-        let collisition = false;
-
         for(let i = 0; i < lastIndex; i++) {
             if(this.squares[i].x === this.squares[lastIndex].x && this.squares[i].y === this.squares[lastIndex].y) {
-                collisition = true;
+                return true;
             }
         }
-        return collisition;
+        return false;
     }
 }

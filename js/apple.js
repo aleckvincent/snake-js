@@ -10,10 +10,10 @@ class Apple {
     draw(context, score) {
         context.beginPath();
         context.arc(this.appleX + 10, this.appleY + 10, 10, 0, 2 * Math.PI);
-        context.fillStyle = "#F58426";
+        context.fillStyle = "#006BB6";
         context.fill();
-        context.font = "15px Arial";
-        context.fillText("SCORE "+ score, 10, window.innerHeight - 10);
+        context.font = "25px Arial";
+        context.fillText("SCORE : "+ score, 10, window.innerHeight - 10);
         context.closePath();
     }
 

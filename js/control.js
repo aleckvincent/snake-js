@@ -9,7 +9,11 @@ class Control {
         this.current = 'right';
         this.context = context;
         this.paused = true;
+        this.startMusic = false;
+        this.speedInterval;
         this.interval;
+        this.gameOver = false;
+        this.myAudio = new Audio('arcade.wav');
     }
 
 
@@ -23,25 +27,13 @@ class Control {
         this.snake.draw(this.context);
         this.apple.draw(this.context, this.snake.score);
         this.snake.checkIfEat(this.apple);
-        let lastIndex = this.snake.squares.length - 1;
-        if(this.snake.gameOver()){
+        this.speedInterval = this.speed(this.snake.score);
+        this.checkIfOut();
+        console.log(this.snake.gameOver());
+        if (this.snake.gameOver() === true) {
             clearInterval(this.interval);
-            this.context.fillText("GAME OVER!!!!!!!!", 550, 250);
-        }
-        
-
-
-        if (this.snake.squares[lastIndex].x >= window.innerWidth) {
-            this.snake.squares[lastIndex].x = 0;
-        }
-        if (this.snake.squares[lastIndex].y >= window.innerHeight) {
-            this.snake.squares[lastIndex].y = 0;
-        }
-        if (this.snake.squares[lastIndex].x < 0) {
-            this.snake.squares[lastIndex].x = window.innerWidth;
-        }
-        if (this.snake.squares[lastIndex].y < 0) {
-            this.snake.squares[lastIndex].y = (window.innerHeight / 20) * 20;
+            this.context.fillText('GAME OVER - PRESS ENTER', (window.innerWidth / 2) - 200, 250);
+            this.gameOver = true;
         }
 
     }
@@ -50,6 +42,7 @@ class Control {
     handleKey(event) {
         let value = event.keyCode;
         let choice;
+
 
         if (value === 39 && this.current != 'left') {
             choice = 'right';
@@ -73,16 +66,51 @@ class Control {
 
         if (value === 32) {
             this.paused = !this.paused;
-            var snd = new Audio("arcade.wav"); // buffers automatically when created
             if (this.paused) {
-                // snd.pause();
-                // snd.currentTime = 0;
-                clearInterval(this.interval);     
+                clearInterval(this.interval);
+                this.context.fillText('PAUSE', 580, 300);
+
             }
             else {
-                // snd.play();
-                this.interval = setInterval(this.animate.bind(this), 100);
+                this.interval = setInterval(this.animate.bind(this), 80);
+                
+                if(!this.startMusic) {
+                    this.myAudio.play();
+                    this.myAudio.volume = 0.4;
+                }
+                this.startMusic = true;
+                this.myAudio.addEventListener('ended', function () {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
             }
         }
+        if (value === 13 && this.gameOver == true) {
+            this.gameOver == false;
+            location.reload();
+        }
+    }
+
+
+    checkIfOut() {
+        let lastIndex = this.snake.squares.length - 1;
+
+        if (this.snake.squares[lastIndex].x >= window.innerWidth) {
+            this.snake.squares[lastIndex].x = 0;
+        }
+        if (this.snake.squares[lastIndex].y >= window.innerHeight) {
+            this.snake.squares[lastIndex].y = 0;
+        }
+        if (this.snake.squares[lastIndex].x < 0) {
+            this.snake.squares[lastIndex].x = window.innerWidth;
+        }
+        if (this.snake.squares[lastIndex].y < 0) {
+            this.snake.squares[lastIndex].y = (window.innerHeight / 20) * 20;
+        }
+    }
+
+    speed(score) {
+
+        return (score / 2) * 100;
     }
 }

@@ -1,5 +1,6 @@
 #myCanvas{
-    background: #006BB6; 
+    background-image: url('../mario.jpg'); 
+    background-size: cover;
 }
 
 html,
